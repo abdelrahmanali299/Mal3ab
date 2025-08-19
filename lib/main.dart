@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mal3ab/features/Home/presentation/views/home_view.dart';
 
 void main() {
   runApp(Mal3ab());
@@ -9,6 +10,8 @@ class Mal3ab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return MaterialApp(
+      home: HomeView(),
+    );
   }
 }
