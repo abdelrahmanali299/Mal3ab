@@ -1,7 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mal3ab/features/Home/presentation/views/home_view.dart';
+import 'package:mal3ab/firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(Mal3ab());
 }
 
@@ -10,9 +14,6 @@ class Mal3ab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomeView(),
-    );
+    return MaterialApp(debugShowCheckedModeBanner: false, home: HomeView());
   }
 }
