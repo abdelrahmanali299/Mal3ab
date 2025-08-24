@@ -1,14 +1,28 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mal3ab/core/services/failure.dart';
+import 'package:mal3ab/features/auth/data/model/user_model.dart';
 import 'package:mal3ab/features/auth/data/repo/auth_repo.dart';
 
 class AuthRepoImpl extends AuthRepo {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   @override
   Future<Either<Failure, User>> login(String userName, String password) async {
     try {
+      final snapshot = await _firestore
+          .collection('users')
+          .where('username', isEqualTo: userName)
+          .limit(1)
+          .get();
+      if (snapshot.docs.isEmpty) {
+        return left(Failure(message: 'Username not found.'));
+      }
+
+      final email = snapshot.docs.first.data()['email'] as String;
+
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: userName,
+        email: email,
         password: password,
       );
       return right(credential.user!);
@@ -16,7 +30,7 @@ class AuthRepoImpl extends AuthRepo {
       if (e.code == 'user-not-found') {
         return left(Failure(message: 'No user found for that email.'));
       } else if (e.code == 'wrong-password') {
-        return Left(Failure(message: 'Wrong password provided for that user.'));
+        return left(Failure(message: 'Wrong password provided for that user.'));
       } else {
         return left(Failure(message: 'user error'));
       }
@@ -24,12 +38,21 @@ class AuthRepoImpl extends AuthRepo {
   }
 
   @override
-  Future<Either<Failure, void>> signUp(String email, String password) async {
+  Future<Either<Failure, void>> signUp(UserModel userModel) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
+    final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        password: userModel.password,
+        email: userModel.email,
       );
+
+  await _firestore.collection('users').doc(userCredential.user!.uid).set({
+    'uid':userCredential.user!.uid,
+    'username':userModel.name,
+    'email':userModel.email,
+  });
+
+
+
       return right(null);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -46,7 +69,8 @@ class AuthRepoImpl extends AuthRepo {
         );
       }
     } catch (e) {
-      return left(Failure(message: 'ther was an error'));
+      print(e);
+      return left(Failure(message: e.toString()));
     }
   }
 }
