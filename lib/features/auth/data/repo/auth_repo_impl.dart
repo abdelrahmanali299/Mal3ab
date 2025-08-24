@@ -22,4 +22,31 @@ class AuthRepoImpl extends AuthRepo {
       }
     }
   }
+
+  @override
+  Future<Either<Failure, void>> signUp(String email, String password) async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return right(null);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        return left(Failure(message: 'The password provided is too weak.'));
+      } else if (e.code == 'email-already-in-use') {
+        return left(
+          Failure(message: 'The account already exists for that email.'),
+        );
+      } else {
+        return left(
+          Failure(
+            message: 'FirebaseAuth error: ${e.message ?? 'Unknown error'}',
+          ),
+        );
+      }
+    } catch (e) {
+      return left(Failure(message: 'ther was an error'));
+    }
+  }
 }
