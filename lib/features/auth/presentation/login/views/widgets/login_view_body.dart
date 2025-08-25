@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mal3ab/features/Home/presentation/manager/cubit/profile_cubit.dart';
-import 'package:mal3ab/features/Home/presentation/views/widgets/profile_view.dart';
+import 'package:mal3ab/features/profile/presentation/manager/cubit/profile_cubit.dart';
+import 'package:mal3ab/features/profile/presentation/views/widgets/profile_view.dart';
 import 'package:mal3ab/features/auth/data/repo/auth_repo_impl.dart';
 import 'package:mal3ab/features/auth/presentation/login/manager/cubit/login_cubit.dart';
 import 'package:mal3ab/features/auth/presentation/login/views/widgets/custom_botton.dart';

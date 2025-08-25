@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:mal3ab/features/Home/presentation/views/home_view.dart';
+import 'package:mal3ab/features/auth/presentation/login/views/login_view.dart';
 import 'package:mal3ab/firebase_options.dart';
 
 void main() async {
@@ -14,6 +14,6 @@ class Mal3ab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: HomeView());
+    return MaterialApp(debugShowCheckedModeBanner: false, home: LoginView());
   }
 }

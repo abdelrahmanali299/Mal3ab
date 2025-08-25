@@ -4,6 +4,7 @@ import 'package:mal3ab/features/auth/data/model/user_model.dart';
 import 'package:mal3ab/features/auth/presentation/login/views/widgets/custom_botton.dart';
 import 'package:mal3ab/features/auth/presentation/login/views/widgets/custom_text_field.dart';
 import 'package:mal3ab/features/auth/presentation/register/manager/cubit/register_cubit.dart';
+import 'package:mal3ab/features/auth/presentation/register/view/widgets/avatars_list_view.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class RegisterViewBody extends StatefulWidget {
@@ -56,7 +57,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                     controller: passwordController,
                   ),
                   SizedBox(height: 25),
-
+                  AvatarsListView(),
                   CustomButton(
                     onTap: () {
                       submitRegister(context);

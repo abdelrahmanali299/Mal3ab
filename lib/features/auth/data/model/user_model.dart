@@ -1,5 +1,5 @@
 class UserModel {
-  final String image;
+   String image;
   final String name;
   final bool isLooged;
   final String email;
