@@ -40,18 +40,17 @@ class AuthRepoImpl extends AuthRepo {
   @override
   Future<Either<Failure, void>> signUp(UserModel userModel) async {
     try {
-    final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        password: userModel.password,
-        email: userModel.email,
-      );
+      final userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            password: userModel.password,
+            email: userModel.email,
+          );
 
-  await _firestore.collection('users').doc(userCredential.user!.uid).set({
-    'uid':userCredential.user!.uid,
-    'username':userModel.name,
-    'email':userModel.email,
-  });
-
-
+      await _firestore.collection('users').doc(userCredential.user!.uid).set({
+        'uid': userCredential.user!.uid,
+        'username': userModel.name,
+        'email': userModel.email,
+      });
 
       return right(null);
     } on FirebaseAuthException catch (e) {

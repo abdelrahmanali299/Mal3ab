@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ProfileViewBody extends StatelessWidget {
   const ProfileViewBody({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
