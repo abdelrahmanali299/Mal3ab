@@ -1,25 +1,24 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mal3ab/core/data_source/firestore_service.dart';
 import 'package:mal3ab/core/services/failure.dart';
 import 'package:mal3ab/features/auth/data/model/user_model.dart';
 import 'package:mal3ab/features/auth/data/repo/auth_repo.dart';
 
 class AuthRepoImpl extends AuthRepo {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   @override
   Future<Either<Failure, User>> login(String userName, String password) async {
     try {
-      final snapshot = await _firestore
-          .collection('users')
-          .where('username', isEqualTo: userName)
-          .limit(1)
-          .get();
-      if (snapshot.docs.isEmpty) {
+      final snapshot = await FirestoreService().getData(
+        '',
+        'users',
+        query: {'where': userName},
+      );
+      if (snapshot.isEmpty) {
         return left(Failure(message: 'Username not found.'));
       }
 
-      final email = snapshot.docs.first.data()['email'] as String;
+      final email = snapshot['email'] as String;
 
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
@@ -40,17 +39,16 @@ class AuthRepoImpl extends AuthRepo {
   @override
   Future<Either<Failure, void>> signUp(UserModel userModel) async {
     try {
-      final userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-            password: userModel.password,
-            email: userModel.email,
-          );
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        password: userModel.password ?? '',
+        email: userModel.email,
+      );
 
-      await _firestore.collection('users').doc(userCredential.user!.uid).set({
-        'uid': userCredential.user!.uid,
-        'username': userModel.name,
-        'email': userModel.email,
-      });
+      await FirestoreService().addData(
+        userModel.id!,
+        'users',
+        userModel.toJson(),
+      );
 
       return right(null);
     } on FirebaseAuthException catch (e) {
@@ -68,7 +66,9 @@ class AuthRepoImpl extends AuthRepo {
         );
       }
     } catch (e) {
-      print(e);
+      if (FirebaseAuth.instance.currentUser != null) {
+        await FirebaseAuth.instance.currentUser!.delete();
+      }
       return left(Failure(message: e.toString()));
     }
   }

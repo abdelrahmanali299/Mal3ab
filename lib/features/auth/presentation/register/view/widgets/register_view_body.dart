@@ -6,6 +6,7 @@ import 'package:mal3ab/features/auth/presentation/login/views/widgets/custom_tex
 import 'package:mal3ab/features/auth/presentation/register/manager/cubit/register_cubit.dart';
 import 'package:mal3ab/features/auth/presentation/register/view/widgets/avatars_list_view.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:uuid/uuid.dart';
 
 class RegisterViewBody extends StatefulWidget {
   const RegisterViewBody({super.key});
@@ -94,6 +95,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
         password: passwordController.text,
         image: '',
         isLooged: false,
+        id: Uuid().v4(),
       );
       context.read<RegisterCubit>().signUp(registerModel);
     } else {

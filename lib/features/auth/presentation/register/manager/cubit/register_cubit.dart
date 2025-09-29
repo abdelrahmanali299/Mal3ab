@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:mal3ab/core/cache_helper.dart';
 import 'package:mal3ab/features/auth/data/model/user_model.dart';
 import 'package:mal3ab/features/auth/data/repo/auth_repo.dart';
 import 'package:meta/meta.dart';
@@ -19,6 +22,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         emit(RegisterFailure(errMessage: failure.message));
       },
       (success) {
+        CacheHelper.setString('user', jsonEncode(userModel.toJson()));
         emit(RegisterSuccess(userModel: userModel));
       },
     );
