@@ -41,7 +41,7 @@ class ProfileRepoImpl extends ProfileRepo {
       await FirestoreService().updateData(
         userModel.id!,
         kUSersCollection,
-        data: {userModel.isLooged.toString(): userModel.isLooged},
+        data: {'isLooged': userModel.isLooged},
       );
       return right(null);
     } catch (e) {

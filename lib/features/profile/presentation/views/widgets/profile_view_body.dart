@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mal3ab/features/auth/data/model/user_model.dart';
 import 'package:mal3ab/features/profile/presentation/manager/cubit/profile_cubit.dart';
+import 'package:mal3ab/features/team_players/presentation/views/team_players_view.dart';
 
 class ProfileViewBody extends StatefulWidget {
   const ProfileViewBody({super.key, required this.userModel});
@@ -44,13 +45,12 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
           SizedBox(height: size.height * .01),
           GestureDetector(
             onTap: () async {
-              context.read<ProfileCubit>().update(widget.userModel);
-
               if (widget.userModel.isLooged) {
                 context.read<ProfileCubit>().withdraw(widget.userModel);
               } else {
                 context.read<ProfileCubit>().registerPlayer(widget.userModel);
               }
+              context.read<ProfileCubit>().update(widget.userModel);
 
               setState(() {});
             },
@@ -91,7 +91,12 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
           ),
           SizedBox(height: size.height * .02),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => TeamPlayersView()),
+              );
+            },
             child: Row(
               children: [
                 Container(

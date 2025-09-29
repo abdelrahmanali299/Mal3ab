@@ -14,7 +14,11 @@ class RegisterCubit extends Cubit<RegisterState> {
   final AuthRepo authRepo;
   Image image = Image.asset('assets/images/3551911.jpg');
   Future<void> signUp(UserModel userModel) async {
-    userModel.image = image.toString();
+    Image image = Image.asset('assets/images/3551911.jpg');
+    AssetImage imageUrl = image.image as AssetImage;
+
+    userModel.image = imageUrl.assetName;
+
     emit(RegisterLooding());
     final result = await authRepo.signUp(userModel);
     result.fold(

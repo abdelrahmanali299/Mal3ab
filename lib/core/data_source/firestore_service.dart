@@ -58,6 +58,11 @@ class FirestoreService {
     return res.data() ?? {};
   }
 
+  Future<List<Map<String, dynamic>>> getAllData(String mainPath) async {
+    var res = await _firestore.collection(mainPath).get();
+    return res.docs.map((e) => e.data()).toList();
+  }
+
   Future<void> deleteDataToSubCollection(
     String mainId,
     String subId,
