@@ -29,15 +29,28 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
   }
 
-  void wirh(String id) async {
+  void withdraw(UserModel userModel) async {
     emit(WithdrawLoading());
-    var res = await ProfileRepoImpl().withdrow(id);
+    var res = await ProfileRepoImpl().withdrow(userModel);
     res.fold(
       (failure) {
         emit(WithdrawFailure(errMessage: failure.message));
       },
       (register) {
         emit(WithdrawSuccess());
+      },
+    );
+  }
+
+  void update(UserModel userModel) async {
+    emit(UpdateLoading());
+    var res = await ProfileRepoImpl().updateData(userModel);
+    res.fold(
+      (failure) {
+        emit(UpdateFailure(errMessage: failure.message));
+      },
+      (register) {
+        emit(UpdatewSuccess());
       },
     );
   }

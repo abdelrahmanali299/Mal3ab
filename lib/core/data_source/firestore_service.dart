@@ -75,4 +75,26 @@ class FirestoreService {
   Future<void> deleteData(String mainId, String mainPath) async {
     await _firestore.collection(mainPath).doc(mainId).delete();
   }
+
+  Future<void> updateData(
+    String mainId,
+    String mainPath, {
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? data,
+  }) async {
+    if (query?['where'] != null) {
+      var snapshot = await _firestore
+          .collection(mainPath)
+          .where('name', isEqualTo: query?['where'])
+          .get();
+
+      for (var doc in snapshot.docs) {
+        await doc.reference.update(data ?? {});
+      }
+    }
+
+    var docRef = _firestore.collection(mainPath).doc(mainId);
+
+    await docRef.update(data ?? {});
+  }
 }

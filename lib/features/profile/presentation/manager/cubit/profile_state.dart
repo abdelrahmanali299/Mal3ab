@@ -24,3 +24,13 @@ final class WithdrawFailure extends ProfileState {
 }
 
 final class WithdrawSuccess extends ProfileState {}
+
+final class UpdateLoading extends ProfileState {}
+
+final class UpdateFailure extends ProfileState {
+  final String errMessage;
+
+  UpdateFailure({required this.errMessage});
+}
+
+final class UpdatewSuccess extends ProfileState {}

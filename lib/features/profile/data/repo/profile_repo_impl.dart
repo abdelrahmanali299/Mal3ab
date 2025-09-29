@@ -9,12 +9,13 @@ class ProfileRepoImpl extends ProfileRepo {
   @override
   Future<Either<Failure, void>> register(UserModel userModel) async {
     try {
-      userModel.isLooged = true;
       await FirestoreService().addData(
         userModel.id!,
         kPlayersCollection,
         userModel.toJson(),
       );
+      userModel.isLooged = true;
+
       return right(null);
     } catch (e) {
       return left(Failure(message: e.toString()));
@@ -22,9 +23,24 @@ class ProfileRepoImpl extends ProfileRepo {
   }
 
   @override
-  Future<Either<Failure, void>> withdrow(String id) async {
+  Future<Either<Failure, void>> withdrow(UserModel userModel) async {
     try {
-      await FirestoreService().deleteData(id, kPlayersCollection);
+      await FirestoreService().deleteData(userModel.id!, kPlayersCollection);
+      userModel.isLooged = false;
+      return right(null);
+    } catch (e) {
+      return left(Failure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateData(UserModel userModel) async {
+    try {
+      await FirestoreService().updateData(
+        userModel.id!,
+        kUSersCollection,
+        data: {userModel.isLooged.toString(): userModel.isLooged},
+      );
       return right(null);
     } catch (e) {
       return left(Failure(message: e.toString()));
