@@ -9,12 +9,13 @@ class ProfileRepoImpl extends ProfileRepo {
   @override
   Future<Either<Failure, void>> register(UserModel userModel) async {
     try {
+      userModel.isLooged = true;
+
       await FirestoreService().addData(
         userModel.id!,
         kPlayersCollection,
         userModel.toJson(),
       );
-      userModel.isLooged = true;
 
       return right(null);
     } catch (e) {
@@ -25,8 +26,9 @@ class ProfileRepoImpl extends ProfileRepo {
   @override
   Future<Either<Failure, void>> withdrow(UserModel userModel) async {
     try {
-      await FirestoreService().deleteData(userModel.id!, kPlayersCollection);
       userModel.isLooged = false;
+
+      await FirestoreService().deleteData(userModel.id!, kPlayersCollection);
       return right(null);
     } catch (e) {
       return left(Failure(message: e.toString()));

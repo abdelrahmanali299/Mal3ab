@@ -44,12 +44,13 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
           SizedBox(height: size.height * .01),
           GestureDetector(
             onTap: () async {
+              context.read<ProfileCubit>().update(widget.userModel);
+
               if (widget.userModel.isLooged) {
                 context.read<ProfileCubit>().withdraw(widget.userModel);
               } else {
                 context.read<ProfileCubit>().registerPlayer(widget.userModel);
               }
-              context.read<ProfileCubit>().update(widget.userModel);
 
               setState(() {});
             },
