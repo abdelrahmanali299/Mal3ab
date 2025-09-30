@@ -10,30 +10,28 @@ class TeamPlayersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TeamPlayerCubit()..getTeamPlayers(),
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text(
-            'Team Players',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          'Team Players',
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
+      ),
 
-        body: BlocBuilder<TeamPlayerCubit, TeamPlayerState>(
-          builder: (context, state) {
-            if (state is GetTeamPlayerSuccess) {
-              return TeamPlayersViewBody(users: state.teamPlayers);
-            }
-            if (state is GetTeamPlayerFailure) {
-              return Center(child: Text(state.message));
-            }
-            return Skeletonizer(
-              child: TeamPlayersViewBody(users: getDummyPlayers()),
-            );
-          },
-        ),
+      body: BlocBuilder<TeamPlayerCubit, TeamPlayerState>(
+        builder: (context, state) {
+          if (state is GetTeamPlayerSuccess) {
+            print('stateeeeeeeeeeee ${state.teamPlayers.length}');
+            return TeamPlayersViewBody(users: state.teamPlayers);
+          }
+          if (state is GetTeamPlayerFailure) {
+            return Center(child: Text(state.message));
+          }
+          return Skeletonizer(
+            child: TeamPlayersViewBody(users: getDummyPlayers()),
+          );
+        },
       ),
     );
   }

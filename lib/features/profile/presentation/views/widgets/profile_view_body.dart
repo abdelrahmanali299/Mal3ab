@@ -6,6 +6,7 @@ import 'package:mal3ab/features/auth/data/model/user_model.dart';
 import 'package:mal3ab/features/profile/presentation/manager/cubit/profile_cubit.dart';
 import 'package:mal3ab/features/profile/presentation/views/widgets/alert_dialog.dart';
 import 'package:mal3ab/features/profile/presentation/views/widgets/register_or_withdraw_button.dart';
+import 'package:mal3ab/features/team_players/presentation/manager/team_player_cubit.dart';
 import 'package:mal3ab/features/team_players/presentation/views/team_players_view.dart';
 
 class ProfileViewBody extends StatelessWidget {
@@ -87,7 +88,13 @@ class ProfileViewBody extends StatelessWidget {
                       ),
                     );
                   } else {
-                    context.read<ProfileCubit>().registerPlayer(userModel);
+                    if (context.read<TeamPlayerCubit>().playersList.length ==
+                        10) {
+                      customSnackBar(context, 'Team is full', Colors.red);
+                    } else {
+                      context.read<ProfileCubit>().registerPlayer(userModel);
+                      context.read<ProfileCubit>().update(userModel);
+                    }
                   }
                 },
                 child: RegisterOrWithdrawButton(
@@ -101,7 +108,13 @@ class ProfileViewBody extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const TeamPlayersView()),
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<TeamPlayerCubit>()
+                          ..getTeamPlayers(),
+                        child: TeamPlayersView(),
+                      ),
+                    ),
                   );
                 },
                 child: Row(
