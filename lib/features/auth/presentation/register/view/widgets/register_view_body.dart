@@ -54,6 +54,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                   CustomTextField(hint: 'Email', controller: emailController),
                   SizedBox(height: 25),
                   CustomTextField(
+                    isPassword: true,
                     hint: 'Password',
                     controller: passwordController,
                   ),

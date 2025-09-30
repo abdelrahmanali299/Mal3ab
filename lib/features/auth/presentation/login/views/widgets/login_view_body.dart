@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mal3ab/core/function/custom_snack_bar.dart';
 import 'package:mal3ab/features/profile/presentation/manager/cubit/profile_cubit.dart';
 import 'package:mal3ab/features/profile/presentation/views/widgets/profile_view.dart';
 import 'package:mal3ab/features/auth/data/repo/auth_repo_impl.dart';
@@ -27,9 +28,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginSuccess) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('logged in successfully')));
+          customSnackBar(context, 'logged in successfully', Colors.green);
 
           Navigator.push(
             context,
@@ -42,9 +41,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
           );
         }
         if (state is LoginFailure) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('logged in failure')));
+          customSnackBar(context, 'logged in failure', Colors.red);
         }
       },
       builder: (context, state) {
@@ -65,6 +62,8 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                   ),
                   SizedBox(height: 25),
                   CustomTextField(
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    isPassword: true,
                     hint: 'password',
                     onChanged: (data) {
                       passwordController.text = data;

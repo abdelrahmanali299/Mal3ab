@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   const CustomTextField({
     super.key,
     required this.hint,
@@ -8,18 +8,45 @@ class CustomTextField extends StatelessWidget {
     this.onsaved,
     this.onChanged,
     this.controller,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.isPassword = false,
+    this.fillColor = const Color(0xffEDEDED),
+    this.focusBorderColor,
+    this.readOnly = false,
+    // this.labelText = '',
+    this.borderColor = Colors.white,
+    this.labelStyle,
+    this.floatingLabelBehavior,
   });
   final String hint;
   final int maxlines;
   final Function(String)? onChanged;
   final void Function(String?)? onsaved;
   final TextEditingController? controller;
+  final Icon? prefixIcon;
+  final Icon? suffixIcon;
+  final bool isPassword;
+  final Color fillColor;
+  final Color? focusBorderColor;
+  final bool readOnly;
+  // final String labelText;
+  final Color borderColor;
+  final TextStyle? labelStyle;
+  final FloatingLabelBehavior? floatingLabelBehavior;
+  @override
+  State<CustomTextField> createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  bool isPasswordVisible = false;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
-      onChanged: onChanged,
-      onSaved: onsaved,
+      readOnly: widget.readOnly,
+      controller: widget.controller,
+      onChanged: widget.onChanged,
+      onSaved: widget.onsaved,
       validator: (value) {
         if (value?.isEmpty ?? true) {
           return 'Feild is requird';
@@ -27,17 +54,33 @@ class CustomTextField extends StatelessWidget {
           return null;
         }
       },
-      // cursorColor: kPrimarycolor,
-      maxLines: maxlines,
+      maxLines: widget.maxlines,
+      obscureText: !isPasswordVisible && widget.isPassword,
       decoration: InputDecoration(
+        floatingLabelBehavior: widget.floatingLabelBehavior,
+        labelStyle: widget.labelStyle,
+        // labelText: widget.labelText,
         filled: true,
-        fillColor: Color(0xffEDEDED),
-
-        hintText: hint,
-        // hintStyle: const TextStyle(color: kPrimarycolor),
+        fillColor: widget.fillColor,
+        prefixIcon: widget.prefixIcon,
+        suffixIcon: widget.isPassword
+            ? IconButton(
+                onPressed: () {
+                  setState(() {
+                    isPasswordVisible = !isPasswordVisible;
+                  });
+                },
+                icon: Icon(
+                  isPasswordVisible
+                      ? Icons.visibility_outlined
+                      : Icons.visibility_off_outlined,
+                ),
+              )
+            : null,
+        hintText: widget.hint,
         enabledBorder: borderBuilder(),
-        // focusedBorder: borderBuilder(kPrimarycolor),
         border: borderBuilder(),
+        focusedBorder: borderBuilder(widget.focusBorderColor),
       ),
     );
   }
@@ -45,7 +88,7 @@ class CustomTextField extends StatelessWidget {
   OutlineInputBorder borderBuilder([color]) {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
-      borderSide: BorderSide(color: Color(0xffEDEDED)),
+      borderSide: BorderSide(color: widget.borderColor),
     );
   }
 }
