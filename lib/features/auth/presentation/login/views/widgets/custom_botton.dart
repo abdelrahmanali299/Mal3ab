@@ -4,12 +4,12 @@ class CustomButton extends StatefulWidget {
   const CustomButton({
     super.key,
     required this.title,
-    required this.color,
+    this.color,
     required this.titleColor,
     this.onTap,
   });
   final String title;
-  final Color color;
+  final Color? color;
   final Color titleColor;
   final VoidCallback? onTap;
 
@@ -24,13 +24,20 @@ class _CustomButtonState extends State<CustomButton> {
       onTap: widget.onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: widget.color,
+          color: widget.color ?? Colors.blue,
           borderRadius: BorderRadius.circular(8),
         ),
         width: double.infinity,
         height: 50,
         child: Center(
-          child: Text(widget.title, style: TextStyle(color: widget.titleColor)),
+          child: Text(
+            widget.title,
+            style: TextStyle(
+              color: widget.titleColor,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
         ),
       ),
     );

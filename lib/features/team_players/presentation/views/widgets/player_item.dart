@@ -9,10 +9,17 @@ class PlayerItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: FirebaseAuth.instance.currentUser?.email == user.email
-          ? Text('You')
-          : Text(user.name),
+          ? Text('You', style: TextStyle(fontWeight: FontWeight.bold))
+          : Text(user.name, style: TextStyle(fontWeight: FontWeight.bold)),
       subtitle: Text('Registerd'),
-      leading: CircleAvatar(child: Image.asset(user.image)),
+      leading: CircleAvatar(
+        radius: 30,
+        backgroundColor: Colors.blue.withValues(alpha: .3),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: Image.asset(user.image, fit: BoxFit.fill),
+        ),
+      ),
     );
   }
 }

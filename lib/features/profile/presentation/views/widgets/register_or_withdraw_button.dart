@@ -22,10 +22,13 @@ class RegisterOrWithdrawButton extends StatelessWidget {
             color: Colors.black.withValues(alpha: .05),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(icon),
+          child: Icon(icon, color: Colors.blue),
         ),
         SizedBox(width: size.width * .05),
-        Text(title, style: TextStyle(fontSize: 16)),
+        Text(
+          title,
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
       ],
     );
   }

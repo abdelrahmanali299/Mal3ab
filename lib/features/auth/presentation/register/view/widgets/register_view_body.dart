@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mal3ab/core/widgets/dont_have_account.dart';
 import 'package:mal3ab/features/auth/data/model/user_model.dart';
 import 'package:mal3ab/features/auth/presentation/login/views/widgets/custom_botton.dart';
 import 'package:mal3ab/features/auth/presentation/login/views/widgets/custom_text_field.dart';
@@ -20,7 +21,6 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final imageController = TextEditingController();
-
   GlobalKey<FormState> formKey = GlobalKey();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   @override
@@ -47,38 +47,39 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
             child: Form(
               autovalidateMode: autovalidateMode,
               key: formKey,
-              child: Column(
-                children: [
-                  CustomTextField(hint: 'Name', controller: nameController),
-                  SizedBox(height: 25),
-                  CustomTextField(hint: 'Email', controller: emailController),
-                  SizedBox(height: 25),
-                  CustomTextField(
-                    isPassword: true,
-                    hint: 'Password',
-                    controller: passwordController,
-                  ),
-                  SizedBox(height: 25),
-                  AvatarsListView(),
-                  CustomButton(
-                    onTap: () {
-                      submitRegister(context);
-                    },
-                    title: 'sign up',
-                    color: Colors.black,
-                    titleColor: Colors.white,
-                  ),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text('already have an account? login'),
-                      ),
-                    ],
-                  ),
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(height: MediaQuery.sizeOf(context).height * .05),
+                    CustomTextField(hint: 'Name', controller: nameController),
+                    SizedBox(height: 25),
+                    CustomTextField(hint: 'Email', controller: emailController),
+                    SizedBox(height: 25),
+                    CustomTextField(
+                      isPassword: true,
+                      hint: 'Password',
+                      controller: passwordController,
+                    ),
+                    SizedBox(height: 25),
+                    AvatarsListView(),
+                    SizedBox(height: 25),
+                    CustomButton(
+                      onTap: () {
+                        submitRegister(context);
+                      },
+                      title: 'sign up',
+                      titleColor: Colors.white,
+                    ),
+                    SizedBox(height: 10),
+                    DontHaveAccount(
+                      text: 'Already have an account? ',
+                      subText: 'sign in',
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -91,10 +92,12 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       UserModel registerModel = UserModel(
-        name: nameController.text,
-        email: emailController.text,
-        password: passwordController.text,
-        image: '',
+        name: nameController.text.trim(),
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+        image:
+            context.read<RegisterCubit>().image ??
+            'assets/images/Arnold_image-removebg-preview.png',
         isLooged: false,
         id: Uuid().v4(),
       );

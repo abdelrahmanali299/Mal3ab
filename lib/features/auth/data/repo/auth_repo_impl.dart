@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mal3ab/constants.dart';
 import 'package:mal3ab/core/data_source/firestore_service.dart';
 import 'package:mal3ab/core/services/failure.dart';
 import 'package:mal3ab/features/auth/data/model/user_model.dart';
@@ -14,7 +15,7 @@ class AuthRepoImpl extends AuthRepo {
         'users',
         query: {'where': userName},
       );
-      if (snapshot.isEmpty) {
+      if (snapshot == null) {
         return left(Failure(message: 'Username not found.'));
       }
 
@@ -39,9 +40,16 @@ class AuthRepoImpl extends AuthRepo {
   @override
   Future<Either<Failure, void>> signUp(UserModel userModel) async {
     try {
+      bool isUserExist = await FirestoreService().isUserExist(
+        userModel.name,
+        kUSersCollection,
+      );
+      if (isUserExist) {
+        return left(Failure(message: 'User name already exist'));
+      }
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         password: userModel.password ?? '',
-        email: userModel.email,
+        email: userModel.email ?? '',
       );
 
       await FirestoreService().addData(

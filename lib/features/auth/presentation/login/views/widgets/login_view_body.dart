@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mal3ab/core/function/custom_snack_bar.dart';
+import 'package:mal3ab/core/widgets/dont_have_account.dart';
 import 'package:mal3ab/features/profile/presentation/manager/cubit/profile_cubit.dart';
 import 'package:mal3ab/features/profile/presentation/views/widgets/profile_view.dart';
 import 'package:mal3ab/features/auth/data/repo/auth_repo_impl.dart';
@@ -41,7 +42,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
           );
         }
         if (state is LoginFailure) {
-          customSnackBar(context, 'logged in failure', Colors.red);
+          customSnackBar(context, state.errMessage, Colors.red);
         }
       },
       builder: (context, state) {
@@ -52,53 +53,56 @@ class _LoginViewBodyState extends State<LoginViewBody> {
             child: Form(
               autovalidateMode: autovalidateMode,
               key: formKey,
-              child: Column(
-                children: [
-                  CustomTextField(
-                    hint: 'UserName',
-                    onChanged: (data) {
-                      nameController.text = data;
-                    },
-                  ),
-                  SizedBox(height: 25),
-                  CustomTextField(
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                    isPassword: true,
-                    hint: 'password',
-                    onChanged: (data) {
-                      passwordController.text = data;
-                    },
-                  ),
-                  SizedBox(height: 25),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height: MediaQuery.sizeOf(context).height * .05),
 
-                  CustomButton(
-                    onTap: () {
-                      submitLogin(context);
-                    },
-                    title: 'login',
-                    color: Colors.black,
-                    titleColor: Colors.white,
-                  ),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => BlocProvider(
-                                create: (context) =>
-                                    RegisterCubit(AuthRepoImpl()),
-                                child: RegisterView(),
-                              ),
+                    CustomTextField(
+                      hint: 'UserName',
+                      onChanged: (data) {
+                        nameController.text = data;
+                      },
+                    ),
+                    SizedBox(height: 25),
+                    CustomTextField(
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      isPassword: true,
+                      hint: 'password',
+                      onChanged: (data) {
+                        passwordController.text = data;
+                      },
+                    ),
+                    SizedBox(height: 25),
+
+                    CustomButton(
+                      onTap: () {
+                        submitLogin(context);
+                      },
+                      title: 'login',
+                      color: Colors.blue,
+                      titleColor: Colors.white,
+                    ),
+                    SizedBox(height: 10),
+                    DontHaveAccount(
+                      text: 'Don\'t have an account? ',
+                      subText: 'register',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => BlocProvider(
+                              create: (context) =>
+                                  RegisterCubit(AuthRepoImpl()),
+                              child: RegisterView(),
                             ),
-                          );
-                        },
-                        child: Text('dont have an account? Register'),
-                      ),
-                    ],
-                  ),
-                ],
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -112,8 +116,8 @@ class _LoginViewBodyState extends State<LoginViewBody> {
       formKey.currentState!.save();
 
       context.read<LoginCubit>().loginUSer(
-        nameController.text,
-        passwordController.text,
+        nameController.text.trim(),
+        passwordController.text.trim(),
       );
     } else {
       autovalidateMode = AutovalidateMode.always;

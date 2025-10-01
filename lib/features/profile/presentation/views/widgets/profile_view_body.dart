@@ -48,7 +48,9 @@ class ProfileViewBody extends StatelessWidget {
           return Column(
             children: [
               SizedBox(height: size.height * .08),
-              Image.asset('assets/images/3551911.jpg', width: size.width * .4),
+              Flexible(
+                child: Image.asset(userModel.image, width: size.width * .4),
+              ),
               Text(
                 userModel.name,
                 style: const TextStyle(
@@ -103,7 +105,7 @@ class ProfileViewBody extends StatelessWidget {
                   icon: buttonIcon,
                 ),
               ),
-              SizedBox(height: size.height * .02),
+              SizedBox(height: size.height * .03),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -127,6 +129,7 @@ class ProfileViewBody extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
+                        color: Colors.blue,
                         FontAwesomeIcons.userGroup,
                         size: size.width * .04,
                       ),
@@ -134,7 +137,10 @@ class ProfileViewBody extends StatelessWidget {
                     SizedBox(width: size.width * .05),
                     const Text(
                       'View Registered Players',
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),

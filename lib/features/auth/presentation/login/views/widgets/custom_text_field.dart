@@ -11,7 +11,7 @@ class CustomTextField extends StatefulWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.isPassword = false,
-    this.fillColor = const Color(0xffEDEDED),
+    this.fillColor,
     this.focusBorderColor,
     this.readOnly = false,
     // this.labelText = '',
@@ -27,7 +27,7 @@ class CustomTextField extends StatefulWidget {
   final Icon? prefixIcon;
   final Icon? suffixIcon;
   final bool isPassword;
-  final Color fillColor;
+  final Color? fillColor;
   final Color? focusBorderColor;
   final bool readOnly;
   // final String labelText;
@@ -61,7 +61,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         labelStyle: widget.labelStyle,
         // labelText: widget.labelText,
         filled: true,
-        fillColor: widget.fillColor,
+        fillColor: widget.fillColor ?? Colors.grey.withValues(alpha: .05),
         prefixIcon: widget.prefixIcon,
         suffixIcon: widget.isPassword
             ? IconButton(

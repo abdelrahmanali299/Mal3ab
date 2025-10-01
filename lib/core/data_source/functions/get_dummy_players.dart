@@ -7,7 +7,7 @@ List<UserModel> getDummyPlayers() {
       id: i.toString(),
       name: 'Player $i',
       email: 'player${i + 1}@gmail.com',
-      image: 'assets/images/3551911.jpg',
+      image: 'assets/images/neymar_image-removebg-preview.png',
     ),
   );
 }

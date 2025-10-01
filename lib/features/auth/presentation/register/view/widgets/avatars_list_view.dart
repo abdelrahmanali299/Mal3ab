@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mal3ab/features/auth/data/model/user_model.dart';
 import 'package:mal3ab/features/auth/presentation/register/manager/cubit/register_cubit.dart';
 
 class AvatarItem extends StatelessWidget {
@@ -8,19 +10,16 @@ class AvatarItem extends StatelessWidget {
   final Image image;
   @override
   Widget build(BuildContext context) {
-    return isActive
-        ? CircleAvatar(
-            radius: 38,
-            backgroundColor: Colors.white,
-            child: CircleAvatar(radius: 34, backgroundImage: image.image),
-          )
-        : CircleAvatar(radius: 38, backgroundImage: image.image);
+    return CircleAvatar(
+      radius: 50,
+      backgroundColor: isActive ? Colors.green : Colors.white,
+      child: FittedBox(child: image),
+    );
   }
 }
 
 class AvatarsListView extends StatefulWidget {
   const AvatarsListView({super.key});
-
   @override
   State<AvatarsListView> createState() => _AvatarsListViewState();
 }
@@ -28,16 +27,11 @@ class AvatarsListView extends StatefulWidget {
 class _AvatarsListViewState extends State<AvatarsListView> {
   int currentIndex = 0;
   List<Image> avatars = [
-    Image.asset('assets/images/3551911.jpg'),
-    Image.asset('assets/images/3551911.jpg'),
-    Image.asset('assets/images/3551911.jpg'),
-    Image.asset('assets/images/3551911.jpg'),
-    Image.asset('assets/images/3551911.jpg'),
-    Image.asset('assets/images/3551911.jpg'),
-    Image.asset('assets/images/3551911.jpg'),
-    Image.asset('assets/images/3551911.jpg'),
-    Image.asset('assets/images/3551911.jpg'),
-    Image.asset('assets/images/3551911.jpg'),
+    Image.asset('assets/images/Arnold_image-removebg-preview.png'),
+    Image.asset('assets/images/Hakimi_image-removebg-preview.png'),
+    Image.asset('assets/images/Kylian_image-removebg-preview.png'),
+    Image.asset('assets/images/messi_image-removebg-preview.png'),
+    Image.asset('assets/images/neymar_image-removebg-preview.png'),
   ];
   @override
   Widget build(BuildContext context) {
@@ -53,7 +47,9 @@ class _AvatarsListViewState extends State<AvatarsListView> {
             child: GestureDetector(
               onTap: () {
                 currentIndex = index;
-                BlocProvider.of<RegisterCubit>(context).image = avatars[index];
+                AssetImage image = avatars[index].image as AssetImage;
+                String imageName = image.assetName;
+                BlocProvider.of<RegisterCubit>(context).image = imageName;
                 setState(() {});
               },
               child: AvatarItem(

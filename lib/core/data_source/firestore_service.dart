@@ -41,7 +41,7 @@ class FirestoreService {
     await _firestore.collection(mainPath).doc(mainId).set(data);
   }
 
-  Future<Map<String, dynamic>> getData(
+  Future<Map<String, dynamic>?> getData(
     String mainId,
     String mainPath, {
     Map<String, dynamic>? query,
@@ -51,6 +51,9 @@ class FirestoreService {
           .collection(mainPath)
           .where('name', isEqualTo: query?['where'])
           .get();
+      if (res.docs.isEmpty) {
+        return null;
+      }
       return res.docs.first.data();
     }
     var res = await _firestore.collection(mainPath).doc(mainId).get();
@@ -101,5 +104,16 @@ class FirestoreService {
     var docRef = _firestore.collection(mainPath).doc(mainId);
 
     await docRef.update(data ?? {});
+  }
+
+  Future<bool> isUserExist(String userName, String mainPath) async {
+    var res = await _firestore.collection(mainPath).get();
+    if (res.docs.isEmpty) return false;
+    for (var user in res.docs) {
+      if (user.data()['name'] == userName) {
+        return true;
+      }
+    }
+    return false;
   }
 }
