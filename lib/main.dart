@@ -1,8 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mal3ab/core/cache_helper.dart';
-import 'package:mal3ab/features/auth/presentation/login/views/login_view.dart';
 import 'package:mal3ab/firebase_options.dart';
+import 'package:mal3ab/splash/presentation/view/splash_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +17,11 @@ class Mal3ab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: LoginView());
+    return ScreenUtilInit(
+      designSize: const Size(393, 830),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      child: MaterialApp(debugShowCheckedModeBanner: false, home: SplashView()),
+    );
   }
 }
