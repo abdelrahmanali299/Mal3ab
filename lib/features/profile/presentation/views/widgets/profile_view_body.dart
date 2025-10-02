@@ -37,7 +37,8 @@ class ProfileViewBody extends StatelessWidget {
           }
 
           if (adminState is GetNewestMatchEmpty) {
-            if (userModel.email == 'bxjdjxk@gmail.com') {
+            if (userModel.email == 'bedoalii255@gmail.com' ||
+                userModel.email == 'Waleedmoaz65@gmail.com') {
               return Center(
                 child: GestureDetector(
                   onTap: () {
@@ -88,7 +89,7 @@ class ProfileViewBody extends StatelessWidget {
 
           if (adminCubit.matchModel.id == null) {
             return const Center(
-              child: Text('No match found', style: TextStyle(fontSize: 18)),
+              child: Text('No match found', style: TextStyle(fontSize: 20)),
             );
           }
 
