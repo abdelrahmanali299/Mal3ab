@@ -55,4 +55,15 @@ class ProfileRepoImpl extends ProfileRepo {
       return left(Failure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, UserModel>> getUserModel(String mainId) async {
+    try {
+      var res = await FirestoreService().getData(mainId, kUSersCollection);
+
+      return right(UserModel.fromJson(res ?? {}));
+    } catch (e) {
+      return left(Failure(message: e.toString()));
+    }
+  }
 }

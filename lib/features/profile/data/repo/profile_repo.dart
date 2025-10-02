@@ -10,4 +10,5 @@ abstract class ProfileRepo {
     required String collection,
     required Map<String, dynamic> data,
   });
+  Future<Either<Failure, UserModel>> getUserModel(String mainId);
 }

@@ -8,7 +8,10 @@ import 'package:mal3ab/features/auth/data/repo/auth_repo.dart';
 
 class AuthRepoImpl extends AuthRepo {
   @override
-  Future<Either<Failure, User>> login(String userName, String password) async {
+  Future<Either<Failure, UserModel>> login(
+    String userName,
+    String password,
+  ) async {
     try {
       final snapshot = await FirestoreService().getData(
         '',
@@ -21,11 +24,11 @@ class AuthRepoImpl extends AuthRepo {
 
       final email = snapshot['email'] as String;
 
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return right(credential.user!);
+      return right(UserModel.fromJson(snapshot));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         return left(Failure(message: 'No user found for that email.'));
