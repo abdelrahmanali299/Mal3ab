@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mal3ab/core/function/custom_snack_bar.dart';
 import 'package:mal3ab/core/widgets/dont_have_account.dart';
 import 'package:mal3ab/features/auth/data/model/user_model.dart';
 import 'package:mal3ab/features/auth/presentation/login/views/widgets/custom_botton.dart';
@@ -28,15 +29,11 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
     return BlocConsumer<RegisterCubit, RegisterState>(
       listener: (context, state) {
         if (state is RegisterSuccess) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('sign up successfully')));
+          customSnackBar(context, 'registered successfully', Colors.green);
           Navigator.pop(context);
         }
         if (state is RegisterFailure) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.errMessage)));
+          customSnackBar(context, state.errMessage, Colors.red);
         }
       },
       builder: (context, state) {
