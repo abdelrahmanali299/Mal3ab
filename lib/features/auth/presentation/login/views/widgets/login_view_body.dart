@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
+import 'package:mal3ab/core/cache_helper.dart';
 import 'package:mal3ab/core/function/custom_snack_bar.dart';
 import 'package:mal3ab/core/widgets/dont_have_account.dart';
 import 'package:mal3ab/features/profile/presentation/manager/cubit/profile_cubit.dart';
@@ -31,7 +34,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
         if (state is LoginSuccess) {
           customSnackBar(context, 'logged in successfully', Colors.green);
 
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (_) => BlocProvider(
@@ -58,7 +61,11 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(height: MediaQuery.sizeOf(context).height * .05),
-
+                    Lottie.asset(
+                      'assets/images/Contract Sign.json',
+                      height: 200.h,
+                      width: 200.w,
+                    ),
                     CustomTextField(
                       hint: 'UserName',
                       onChanged: (data) {
@@ -78,6 +85,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
 
                     CustomButton(
                       onTap: () {
+                        CacheHelper.setBool('login', true);
                         submitLogin(context);
                       },
                       title: 'login',
