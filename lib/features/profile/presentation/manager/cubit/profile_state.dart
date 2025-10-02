@@ -25,12 +25,22 @@ final class WithdrawFailure extends ProfileState {
 
 final class WithdrawSuccess extends ProfileState {}
 
-final class UpdateLoading extends ProfileState {}
+final class UpdateUserLoading extends ProfileState {}
 
-final class UpdateFailure extends ProfileState {
+final class UpdateUserFailure extends ProfileState {
   final String errMessage;
 
-  UpdateFailure({required this.errMessage});
+  UpdateUserFailure({required this.errMessage});
 }
 
-final class UpdatewSuccess extends ProfileState {}
+final class UpdateUserSuccess extends ProfileState {}
+
+final class UpdatePlayerLoading extends ProfileState {}
+
+final class UpdatePlayerFailure extends ProfileState {
+  final String errMessage;
+
+  UpdatePlayerFailure({required this.errMessage});
+}
+
+final class UpdatePlayerSuccess extends ProfileState {}

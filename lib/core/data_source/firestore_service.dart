@@ -56,6 +56,17 @@ class FirestoreService {
       }
       return res.docs.first.data();
     }
+
+    if (query?['orderBy'] != null) {
+      var res = await _firestore
+          .collection(mainPath)
+          .orderBy(query?['orderBy'], descending: query?['desc'] ?? false)
+          .get();
+      if (res.docs.isEmpty) {
+        return null;
+      }
+      return res.docs.first.data();
+    }
     var res = await _firestore.collection(mainPath).doc(mainId).get();
 
     return res.data() ?? {};

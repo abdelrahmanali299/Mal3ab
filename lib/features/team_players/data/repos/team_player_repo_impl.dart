@@ -9,10 +9,17 @@ class TeamPlayerRepoImpl extends TeamPlayerRepo {
   @override
   Future<Either<Failure, List<UserModel>>> getAllPlayers(
     String mainPath,
+    String mainId,
   ) async {
     try {
-      var res = await _firestoreService.getAllData(mainPath);
-      return right(res.map((e) => UserModel.fromJson(e)).toList());
+      var res = await _firestoreService.getData(mainId, mainPath);
+      if (res?['players'] == null) return right([]);
+      // i want to get all player from the matches collection that contain the match model that contain the players that list of usermodel and return them as a list of UserModels
+      List<UserModel> players = [];
+      for (var player in res?['players']) {
+        players.add(UserModel.fromJson(player));
+      }
+      return right(players);
     } catch (e) {
       return left(Failure(message: e.toString()));
     }

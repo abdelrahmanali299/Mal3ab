@@ -19,9 +19,12 @@ class TeamPlayerCubit extends Cubit<TeamPlayerState> {
   TeamPlayerCubit() : super(TeamPlayerInitial());
 
   List<UserModel> playersList = [];
-  getTeamPlayers() async {
+  getTeamPlayers(String mainId) async {
     emit(GetTeamPlayerLoading());
-    var res = await TeamPlayerRepoImpl().getAllPlayers(kPlayersCollection);
+    var res = await TeamPlayerRepoImpl().getAllPlayers(
+      kMatchesCollection,
+      mainId,
+    );
     res.fold((failure) => emit(GetTeamPlayerFailure(failure.message)), (
       players,
     ) {

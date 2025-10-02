@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:mal3ab/constants.dart';
 import 'package:mal3ab/features/auth/data/model/user_model.dart';
 import 'package:mal3ab/features/profile/data/repo/profile_repo_impl.dart';
 import 'package:meta/meta.dart';
@@ -13,22 +14,31 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   ProfileCubit() : super(ProfileInitial());
 
-  registerPlayer(UserModel userModel) async {
+  registerPlayer(String mainId, Map<String, dynamic> data) async {
     emit(RegisterLoading());
-    var res = await ProfileRepoImpl().register(userModel);
+    var res = await ProfileRepoImpl().updateData(
+      mainId: mainId,
+      collection: kMatchesCollection,
+      data: data,
+    );
+
     res.fold(
       (failure) {
         emit(RegisterFailure(errMessage: failure.message));
       },
-      (register) {
+      (register) async {
         emit(RegisterSuccess());
       },
     );
   }
 
-  void withdraw(UserModel userModel) async {
+  void withdraw(String mainId, Map<String, dynamic> data) async {
     emit(WithdrawLoading());
-    var res = await ProfileRepoImpl().withdrow(userModel);
+    var res = await ProfileRepoImpl().updateData(
+      mainId: mainId,
+      collection: kMatchesCollection,
+      data: data,
+    );
     res.fold(
       (failure) {
         emit(WithdrawFailure(errMessage: failure.message));
@@ -39,15 +49,44 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
   }
 
-  void update(UserModel userModel) async {
-    emit(UpdateLoading());
-    var res = await ProfileRepoImpl().updateData(userModel);
+  void updateUser({
+    required String mainId,
+    required String collection,
+    required Map<String, dynamic> data,
+  }) async {
+    emit(UpdateUserLoading());
+    var res = await ProfileRepoImpl().updateData(
+      mainId: mainId,
+      collection: collection,
+      data: data,
+    );
     res.fold(
       (failure) {
-        emit(UpdateFailure(errMessage: failure.message));
+        emit(UpdateUserFailure(errMessage: failure.message));
       },
       (register) {
-        emit(UpdatewSuccess());
+        emit(UpdateUserSuccess());
+      },
+    );
+  }
+
+  updatePlayers({
+    required String mainId,
+    required String collection,
+    required Map<String, dynamic> data,
+  }) async {
+    emit(UpdatePlayerLoading());
+    var res = await ProfileRepoImpl().updateData(
+      mainId: mainId,
+      collection: collection,
+      data: data,
+    );
+    res.fold(
+      (failure) {
+        emit(UpdatePlayerFailure(errMessage: failure.message));
+      },
+      (register) {
+        emit(UpdatePlayerSuccess());
       },
     );
   }

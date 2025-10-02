@@ -2,18 +2,22 @@ import 'package:dartz/dartz.dart';
 import 'package:mal3ab/constants.dart';
 import 'package:mal3ab/core/data_source/firestore_service.dart';
 import 'package:mal3ab/core/services/failure.dart';
+import 'package:mal3ab/features/admin/data/models/match_model.dart';
 import 'package:mal3ab/features/auth/data/model/user_model.dart';
 import 'package:mal3ab/features/profile/data/repo/profile_repo.dart';
 
 class ProfileRepoImpl extends ProfileRepo {
   @override
-  Future<Either<Failure, void>> register(UserModel userModel) async {
+  Future<Either<Failure, void>> register(
+    UserModel userModel,
+    String mainId,
+  ) async {
     try {
       userModel.isLooged = true;
 
       await FirestoreService().addData(
-        userModel.id!,
-        kPlayersCollection,
+        mainId,
+        kMatchesCollection,
         userModel.toJson(),
       );
 
@@ -24,11 +28,14 @@ class ProfileRepoImpl extends ProfileRepo {
   }
 
   @override
-  Future<Either<Failure, void>> withdrow(UserModel userModel) async {
+  Future<Either<Failure, void>> withdrow(
+    UserModel userModel,
+    String mainId,
+  ) async {
     try {
       userModel.isLooged = false;
 
-      await FirestoreService().deleteData(userModel.id!, kPlayersCollection);
+      await FirestoreService().deleteData(mainId, kMatchesCollection);
       return right(null);
     } catch (e) {
       return left(Failure(message: e.toString()));
@@ -36,13 +43,13 @@ class ProfileRepoImpl extends ProfileRepo {
   }
 
   @override
-  Future<Either<Failure, void>> updateData(UserModel userModel) async {
+  Future<Either<Failure, void>> updateData({
+    required String mainId,
+    required String collection,
+    required Map<String, dynamic> data,
+  }) async {
     try {
-      await FirestoreService().updateData(
-        userModel.id!,
-        kUSersCollection,
-        data: {'isLooged': userModel.isLooged},
-      );
+      await FirestoreService().updateData(mainId, collection, data: data);
       return right(null);
     } catch (e) {
       return left(Failure(message: e.toString()));
