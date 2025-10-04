@@ -97,6 +97,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                       text: 'Don\'t have an account? ',
                       subText: 'register',
                       onTap: () {
+                        
                         Navigator.push(
                           context,
                           MaterialPageRoute(

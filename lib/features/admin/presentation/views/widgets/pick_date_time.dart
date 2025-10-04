@@ -30,7 +30,7 @@ class _PickDateTimeState extends State<PickDateTime> {
           lastDate: widget.lastMatchDate.add(const Duration(days: 365)),
           initialDate: selectedDate ?? widget.lastMatchDate,
         );
-        widget.onDateSelected(selectedDate!);
+        widget.onDateSelected(selectedDate ?? DateTime.now());
         setState(() {});
       },
       child: Container(
@@ -42,8 +42,9 @@ class _PickDateTimeState extends State<PickDateTime> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: FittedBox(
+            fit: BoxFit.scaleDown,
             child: Text(
-              '${selectedDate?.day}/${selectedDate?.month}/${selectedDate?.year} ${selectedDate?.hour}:${selectedDate?.minute}',
+              '${selectedDate?.day}/${selectedDate?.month}/${selectedDate?.year} ',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),

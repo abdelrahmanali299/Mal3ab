@@ -5,8 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mal3ab/core/cache_helper.dart';
 import 'package:mal3ab/features/auth/presentation/login/views/login_view.dart';
+import 'package:mal3ab/features/on_boarding/presentation/views/on_boarding_view.dart';
 import 'package:mal3ab/features/profile/presentation/views/widgets/profile_view.dart';
-import 'package:mal3ab/onboarding/presentation/view/onboarding_view.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -35,7 +35,7 @@ class _SplashViewState extends State<SplashView> {
                   )
           : Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (_) => OnboardingView()),
+              MaterialPageRoute(builder: (_) => OnBoardingView()),
             );
     });
   }

@@ -68,7 +68,7 @@ class _AdminViewBodyState extends State<AdminViewBody> {
                                     PickDateTime(
                                       lastMatchDate:
                                           context
-                                              .read<AdminCubit>()
+                                              .watch<AdminCubit>()
                                               .matchModel
                                               .startDate ??
                                           DateTime.now(),

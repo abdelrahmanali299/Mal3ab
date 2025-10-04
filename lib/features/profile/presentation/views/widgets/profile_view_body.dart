@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mal3ab/constants.dart';
 import 'package:mal3ab/core/function/custom_snack_bar.dart';
@@ -37,8 +38,8 @@ class ProfileViewBody extends StatelessWidget {
           }
 
           if (adminState is GetNewestMatchEmpty) {
-            if (userModel.email == 'bedoalii255@gmail.com' ||
-                userModel.email == 'Waleedmoaz65@gmail.com') {
+            if (userModel.email == admin1Email ||
+                userModel.email == admin2Email) {
               return Center(
                 child: GestureDetector(
                   onTap: () {
@@ -79,11 +80,26 @@ class ProfileViewBody extends StatelessWidget {
                 ),
               );
             }
-            return const Center(
-              child: Text(
-                'No match available yet',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
+            return Column(
+              children: [
+                Image.asset(userModel.image, height: 200.h, width: 200.w),
+                Text(
+                  userModel.name,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                Spacer(),
+                const Center(
+                  child: Text(
+                    'No match available yet',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+                Spacer(),
+              ],
             );
           }
 
@@ -150,7 +166,7 @@ class ProfileViewBody extends StatelessWidget {
                   Text(
                     isRegistered ? 'registered' : 'not registered',
                     style: TextStyle(
-                      color: Colors.black.withOpacity(.5),
+                      color: Colors.black.withValues(alpha: .5),
                       fontSize: 16,
                     ),
                   ),
@@ -245,7 +261,9 @@ class ProfileViewBody extends StatelessWidget {
                           builder: (innerContext) => BlocProvider.value(
                             value: context.read<TeamPlayerCubit>()
                               ..getTeamPlayers(adminCubit.matchModel.id ?? ''),
-                            child: const TeamPlayersView(),
+                            child: TeamPlayersView(
+                              match: adminCubit.matchModel,
+                            ),
                           ),
                         ),
                       );
@@ -256,7 +274,7 @@ class ProfileViewBody extends StatelessWidget {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(.1),
+                            color: Colors.black.withValues(alpha: .1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
@@ -277,43 +295,46 @@ class ProfileViewBody extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: size.height * .03),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (innerContext) => BlocProvider.value(
-                            value: context.read<AdminCubit>(),
-                            child: const AdminView(),
+                  userModel.email == admin1Email ||
+                          userModel.email == admin2Email
+                      ? GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (innerContext) => BlocProvider.value(
+                                  value: context.read<AdminCubit>(),
+                                  child: const AdminView(),
+                                ),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withValues(alpha: .05),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: const Icon(
+                                  Icons.admin_panel_settings_outlined,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                              SizedBox(width: size.width * .05),
+                              const Text(
+                                'Admin Panel',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(.05),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Icon(
-                            Icons.admin_panel_settings_outlined,
-                            color: Colors.blue,
-                          ),
-                        ),
-                        SizedBox(width: size.width * .05),
-                        const Text(
-                          'Admin Panel',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                        )
+                      : SizedBox.shrink(),
                 ],
               );
             },

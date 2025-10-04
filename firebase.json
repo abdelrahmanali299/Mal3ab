@@ -23,8 +23,8 @@
     }
   },
   "hosting": {
-    "site": "mal3ab-33199-bba32",
     "public": "build/web",
+    "site": "mal3ab-33199-3ec71",
     "ignore": [
       "firebase.json",
       "**/.*",
